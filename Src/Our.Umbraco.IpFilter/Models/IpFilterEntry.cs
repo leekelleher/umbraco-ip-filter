@@ -16,6 +16,7 @@ namespace Our.Umbraco.IpFilter.Models
 
         [JsonProperty("whitelist")]
         [Column("Whitelist")]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string __RawWhitelist { get; set; }
 
@@ -34,6 +35,7 @@ namespace Our.Umbraco.IpFilter.Models
             
         [JsonProperty("blacklist")]
         [Column("Blacklist")]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string __RawBlacklist { get; set; }
 
