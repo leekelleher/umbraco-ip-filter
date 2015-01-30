@@ -133,7 +133,7 @@ namespace Our.Umbraco.IpFilter.Services
 
         private static string FormatIpAsRegex(string input)
         {
-            return "^" + input.Replace(".", @"\.").Trim() + "$";
+            return "^" + input.Trim().TrimStart('^').TrimEnd('$') + "$";
         }
 
         private CacheHelper Cache
