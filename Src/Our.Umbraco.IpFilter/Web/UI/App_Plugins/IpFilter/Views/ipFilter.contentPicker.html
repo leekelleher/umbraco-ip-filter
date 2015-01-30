@@ -1,0 +1,19 @@
+﻿<div>
+    <ul class="unstyled" ng-show="node">
+        <li>
+            <a href  ng-click="removeItem()" prevent-default>
+                <i class="icon icon-delete red"></i>
+                <i class="icon {{node.icon}}"></i>
+                {{node.name}}
+            </a>
+        </li>
+    </ul>
+    <ul class="unstyled" ng-hide="node">
+        <li>
+            <a href ng-click="openPicker()" prevent-default>
+                <i class="icon icon-add blue"></i>
+                Select
+            </a>
+        </li>
+    </ul>
+</div>
