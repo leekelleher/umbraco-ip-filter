@@ -76,12 +76,6 @@ namespace Our.Umbraco.IpFilter.Services
                     if (lastList == "")
                     {
                         canAccess = true;
-                    }
-
-                    // Check to see if we have switched list type and if so
-                    // track the list we are on now and when we changed
-                    if (lastList != "b")
-                    {
                         listChangeIndex = i;
                         lastList = "b";
                     }
@@ -98,6 +92,14 @@ namespace Our.Umbraco.IpFilter.Services
                         var ipRegex = FormatIpAsRegex(ip);
                         if (Regex.IsMatch(ipAddress, ipRegex))
                         {
+                            // Check to see if we have switched list type and if so
+                            // track the list we are on now and when we changed
+                            if (lastList != "b")
+                            {
+                                listChangeIndex = i;
+                                lastList = "b";
+                            }
+
                             canAccess = false;
                             break;
                         }
@@ -111,12 +113,6 @@ namespace Our.Umbraco.IpFilter.Services
                     if (lastList == "")
                     {
                         canAccess = false;
-                    }
-
-                    // Check to see if we have switched list type and if so
-                    // track the list we are on now and when we changed
-                    if (lastList != "w")
-                    {
                         listChangeIndex = i;
                         lastList = "w";
                     }
@@ -133,6 +129,14 @@ namespace Our.Umbraco.IpFilter.Services
                         var ipRegex = FormatIpAsRegex(ip);
                         if (Regex.IsMatch(ipAddress, ipRegex))
                         {
+                            // Check to see if we have switched list type and if so
+                            // track the list we are on now and when we changed
+                            if (lastList != "w")
+                            {
+                                listChangeIndex = i;
+                                lastList = "w";
+                            }
+
                             canAccess = true;
                             break;
                         }
