@@ -9,7 +9,9 @@ namespace Our.Umbraco.IpFilter.Extensions
         public static string GetClientIpAddress(this HttpRequest request)
         {
             // check the querystring for a forced IP address (for testing purposes)
-            var ipAddress = request.QueryString["ip"];
+            var ipAddress = HttpContext.Current.IsDebuggingEnabled 
+                ? request.QueryString["ip"] 
+                : null;
 
             // check the "HTTP_X_FORWARDED_FOR" value, splits the list by comma, then take the first value
             if (string.IsNullOrWhiteSpace(ipAddress))
