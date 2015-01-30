@@ -21,7 +21,13 @@ namespace Our.Umbraco.IpFilter
                     .Where(x => int.Parse((string)x.Id) > 0
                         && ipFilterService.IsIpProtected(int.Parse((string)x.Id))))
                 {
-                    node.CssClasses.Add("protected"); 
+                    node.CssClasses.Add("protected");
+
+                    // If this node doesn't have an entry specifically then mark it grey
+                    if (!ipFilterService.IsIpProtected(int.Parse((string)node.Id), false))
+                    {
+                        node.CssClasses.Add("alt");
+                    }
                 }
             };
 

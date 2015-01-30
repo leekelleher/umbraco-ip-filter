@@ -18,17 +18,20 @@ namespace Our.Umbraco.IpFilter.Services
             _ipFilterRepo = new IpFilterRepository();
         }
 
-        public bool IsIpProtected(int nodeId)
+        public bool IsIpProtected(int nodeId, bool recursive = true)
         {
             var node = UmbracoContext.Current.ContentCache.GetById(nodeId);
-            return IsIpProtected(node);
+            return IsIpProtected(node, recursive);
         }
 
-        public bool IsIpProtected(IPublishedContent node)
+        public bool IsIpProtected(IPublishedContent node, bool recursive = true)
         {
             var pathIds = node.Path.Split(',').Select(int.Parse);
+            var entries = GetEnabledEntriesByNodeIds(pathIds);
 
-            return GetEnabledEntriesByNodeIds(pathIds).Any();
+            return recursive 
+                ? entries.Any()
+                : entries.SingleOrDefault(x => x.NodeId == node.Id) != null;
         }
 
         public bool CanAccess(int nodeId, string ipAddress)
@@ -59,36 +62,82 @@ namespace Our.Umbraco.IpFilter.Services
             var canAccess = true;
             errorPageNodeId = 0;
 
-            // Apply blacklists
-            if (entries.Any(x => x.Blacklist.Any()))
-            {
-                var ips = entries.SelectMany(x => x.Blacklist).Distinct();
-                foreach (var ip in ips)
-                {
-                    var ipRegex = FormatIpAsRegex(ip);
-                    if (Regex.IsMatch(ipAddress, ipRegex))
-                    {
-                        canAccess = false;
-                        break;
-                    }
-                }
-            }
+            var lastList = "";
+            var listChangeIndex = -1;
 
-            // Apply whitelists
-            if (entries.Any(x => x.Whitelist.Any()))
+            for (var i = 0; i < entries.Count; i++)
             {
-                // Whitelists override blacklists
-                canAccess = false;
+                var entry = entries[i];
 
-                var ips = entries.SelectMany(x => x.Whitelist).Distinct();
-                foreach (var ip in ips)
+                if (entry.Blacklist.Any())
                 {
-                    var ipRegex = FormatIpAsRegex(ip);
-                    if (Regex.IsMatch(ipAddress, ipRegex))
+                    // If no IP filter has been hit yet, and given we are the
+                    // blacklist, assume everyone has access unless blacklisted
+                    if (lastList == "")
                     {
                         canAccess = true;
-                        break;
                     }
+
+                    // Check to see if we have switched list type and if so
+                    // track the list we are on now and when we changed
+                    if (lastList != "b")
+                    {
+                        listChangeIndex = i;
+                        lastList = "b";
+                    }
+
+                    // Lookup IP's between now and when we last changed list
+                    var ips = entries.Skip(listChangeIndex)
+                        .Take((i + 1) - listChangeIndex)
+                        .SelectMany(x => x.Blacklist)
+                        .Distinct();
+
+                    // Check our IP against the list
+                    foreach (var ip in ips)
+                    {
+                        var ipRegex = FormatIpAsRegex(ip);
+                        if (Regex.IsMatch(ipAddress, ipRegex))
+                        {
+                            canAccess = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (entry.Whitelist.Any())
+                {
+                    // If no IP filter has been hit yet, and given we are the
+                    // whitelist, assume everyone is blocked unless whitelisted
+                    if (lastList == "")
+                    {
+                        canAccess = false;
+                    }
+
+                    // Check to see if we have switched list type and if so
+                    // track the list we are on now and when we changed
+                    if (lastList != "w")
+                    {
+                        listChangeIndex = i;
+                        lastList = "w";
+                    }
+
+                    // Lookup IP's between now and when we last changed list
+                    var ips = entries.Skip(listChangeIndex)
+                        .Take((i + 1) - listChangeIndex)
+                        .SelectMany(x => x.Whitelist)
+                        .Distinct();
+
+                    // Check our IP against the list
+                    foreach (var ip in ips)
+                    {
+                        var ipRegex = FormatIpAsRegex(ip);
+                        if (Regex.IsMatch(ipAddress, ipRegex))
+                        {
+                            canAccess = true;
+                            break;
+                        }
+                    }
+
                 }
             }
 

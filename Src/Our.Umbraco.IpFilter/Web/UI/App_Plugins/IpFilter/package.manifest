@@ -1,5 +1,8 @@
 ﻿{
     "javascript" : [
         '~/App_Plugins/IpFilter/Js/ipFilter.js'
+    ],
+    "css" : [
+        '~/App_Plugins/IpFilter/Css/ipFilter.css'
     ]
 }
