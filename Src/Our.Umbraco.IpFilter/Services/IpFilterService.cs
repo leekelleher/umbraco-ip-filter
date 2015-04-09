@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Our.Umbraco.IpFilter.Data.Repositories;
 using Our.Umbraco.IpFilter.Models;
@@ -18,20 +19,37 @@ namespace Our.Umbraco.IpFilter.Services
             _ipFilterRepo = new IpFilterRepository();
         }
 
-        public bool IsIpProtected(int nodeId, bool recursive = true)
+        public bool IsIpProtected(int nodeId, bool recursive = true, bool checkUnpublished = false)
         {
             var node = UmbracoContext.Current.ContentCache.GetById(nodeId);
-            return IsIpProtected(node, recursive);
+            if (node != null)
+                return IsIpProtected(node, recursive);
+
+            if (checkUnpublished)
+            {
+                var content = ApplicationContext.Current.Services.ContentService.GetById(nodeId);
+                if (content != null)
+                {
+                    return IsIpProtected(content.Id, content.Path, recursive);
+                }
+            }
+
+            return false;
         }
 
         public bool IsIpProtected(IPublishedContent node, bool recursive = true)
         {
-            var pathIds = node.Path.Split(',').Select(int.Parse);
+            return IsIpProtected(node.Id, node.Path, recursive);
+        }
+
+        internal bool IsIpProtected(int nodeId, string path, bool recursive = true)
+        {
+            var pathIds = path.Split(',').Select(int.Parse).ToArray();
             var entries = GetEnabledEntriesByNodeIds(pathIds);
 
-            return recursive 
+            return recursive
                 ? entries.Any()
-                : entries.SingleOrDefault(x => x.NodeId == node.Id) != null;
+                : entries.SingleOrDefault(x => x.NodeId == nodeId) != null;
         }
 
         public bool CanAccess(int nodeId, string ipAddress)
@@ -54,7 +72,12 @@ namespace Our.Umbraco.IpFilter.Services
 
         public bool CanAccess(IPublishedContent node, string ipAddress, out int errorPageNodeId)
         {
-            var pathIds = node.Path.Split(',').Select(int.Parse).ToList();
+            return CanAccess(node.Path, ipAddress, out errorPageNodeId);
+        }
+
+        internal bool CanAccess(string path, string ipAddress, out int errorPageNodeId)
+        {
+            var pathIds = path.Split(',').Select(int.Parse).ToArray();
             var entries = GetEnabledEntriesByNodeIds(pathIds)
                 .OrderBy(x => pathIds.FindIndex(y => y == x.NodeId))
                 .ToList();

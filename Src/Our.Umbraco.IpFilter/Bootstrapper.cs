@@ -17,16 +17,16 @@ namespace Our.Umbraco.IpFilter
             {
                 if (sender.TreeAlias == "content")
                 {
-                    var ipFilterService = new IpFilterService();
+                    var ipFilterService = new IpFilterService(); 
 
                     foreach (var node in args.Nodes
                         .Where(x => int.Parse((string) x.Id) > 0
-                                    && ipFilterService.IsIpProtected(int.Parse((string) x.Id))))
+                            && ipFilterService.IsIpProtected(int.Parse((string) x.Id), checkUnpublished: true)))
                     {
                         node.CssClasses.Add("protected");
 
                         // If this node doesn't have an entry specifically then mark it grey
-                        if (!ipFilterService.IsIpProtected(int.Parse((string) node.Id), false))
+                        if (!ipFilterService.IsIpProtected(int.Parse((string)node.Id), false, true))
                         {
                             node.CssClasses.Add("alt");
                         }
