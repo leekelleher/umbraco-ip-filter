@@ -8,25 +8,28 @@ using Umbraco.Web;
 using Umbraco.Web.Routing;
 
 namespace Our.Umbraco.IpFilter
-{
+{ 
     internal class Bootstrapper : ApplicationEventHandler
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             global::Umbraco.Web.Trees.ContentTreeController.TreeNodesRendering += (sender, args) =>
             {
-                var ipFilterService = new IpFilterService();
-
-                foreach (var node in args.Nodes
-                    .Where(x => int.Parse((string)x.Id) > 0
-                        && ipFilterService.IsIpProtected(int.Parse((string)x.Id))))
+                if (sender.TreeAlias == "content")
                 {
-                    node.CssClasses.Add("protected");
+                    var ipFilterService = new IpFilterService();
 
-                    // If this node doesn't have an entry specifically then mark it grey
-                    if (!ipFilterService.IsIpProtected(int.Parse((string)node.Id), false))
+                    foreach (var node in args.Nodes
+                        .Where(x => int.Parse((string) x.Id) > 0
+                                    && ipFilterService.IsIpProtected(int.Parse((string) x.Id))))
                     {
-                        node.CssClasses.Add("alt");
+                        node.CssClasses.Add("protected");
+
+                        // If this node doesn't have an entry specifically then mark it grey
+                        if (!ipFilterService.IsIpProtected(int.Parse((string) node.Id), false))
+                        {
+                            node.CssClasses.Add("alt");
+                        }
                     }
                 }
             };
@@ -34,45 +37,48 @@ namespace Our.Umbraco.IpFilter
             // Register the IpFilter menu item
             global::Umbraco.Web.Trees.ContentTreeController.MenuRendering += (sender, args) =>
             {
-                var nodeId = int.Parse(args.NodeId);
-                if (nodeId > 0)
+                if (sender.TreeAlias == "content")
                 {
-                    var nodePath = "";
-
-                    // See if node is in content cache
-                    var node = UmbracoContext.Current.ContentCache.GetById(nodeId);
-                    if (node != null)
+                    var nodeId = int.Parse(args.NodeId);
+                    if (nodeId > 0)
                     {
-                        nodePath = node.Path;
-                    }
+                        var nodePath = "";
 
-                    // Node not in content cache, so get it from the db
-                    if (nodePath.IsNullOrWhiteSpace())
-                    {
-                        var contentNode = ApplicationContext.Current.Services.ContentService.GetById(nodeId);
-                        if (contentNode != null)
+                        // See if node is in content cache
+                        var node = UmbracoContext.Current.ContentCache.GetById(nodeId);
+                        if (node != null)
                         {
-                            nodePath = contentNode.Path;
+                            nodePath = node.Path;
                         }
-                    }
 
-                    // Check to see if we are in main content tree and not the trash
-                    if (!nodePath.IsNullOrWhiteSpace() && nodePath.StartsWith("-1,"))
-                    {
-                        // Create the menu item
-                        var i = new global::Umbraco.Web.Models.Trees.MenuItem("ipFilter", "IP Filter")
+                        // Node not in content cache, so get it from the db
+                        if (nodePath.IsNullOrWhiteSpace())
                         {
-                            Icon = "lock",
-                        };
+                            var contentNode = ApplicationContext.Current.Services.ContentService.GetById(nodeId);
+                            if (contentNode != null)
+                            {
+                                nodePath = contentNode.Path;
+                            }
+                        }
 
-                        // Set action to correct view
-                        i.AdditionalData.Add("actionView", "/App_Plugins/IpFilter/Views/ipFilter.html");
+                        // Check to see if we are in main content tree and not the trash
+                        if (!nodePath.IsNullOrWhiteSpace() && nodePath.StartsWith("-1,"))
+                        {
+                            // Create the menu item
+                            var i = new global::Umbraco.Web.Models.Trees.MenuItem("ipFilter", "IP Filter")
+                            {
+                                Icon = "lock",
+                            };
 
-                        // Insert the menu item
-                        var paIdx = args.Menu.Items.FindIndex(x => x.Alias == "protect");
+                            // Set action to correct view
+                            i.AdditionalData.Add("actionView", "/App_Plugins/IpFilter/Views/ipFilter.html");
 
-                        args.Menu.Items.Insert(paIdx + 1, i);
+                            // Insert the menu item
+                            var paIdx = args.Menu.Items.FindIndex(x => x.Alias == "protect");
 
+                            args.Menu.Items.Insert(paIdx + 1, i);
+
+                        }
                     }
                 }
             };
