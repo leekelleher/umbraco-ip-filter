@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Our.Umbraco.IpFilter.Data.Repositories;
 using Our.Umbraco.IpFilter.Models;

@@ -8,7 +8,7 @@ using Umbraco.Web;
 using Umbraco.Web.Routing;
 
 namespace Our.Umbraco.IpFilter
-{ 
+{
     internal class Bootstrapper : ApplicationEventHandler
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
@@ -17,11 +17,11 @@ namespace Our.Umbraco.IpFilter
             {
                 if (sender.TreeAlias == "content")
                 {
-                    var ipFilterService = new IpFilterService(); 
+                    var ipFilterService = new IpFilterService();
 
                     foreach (var node in args.Nodes
-                        .Where(x => int.Parse((string) x.Id) > 0
-                            && ipFilterService.IsIpProtected(int.Parse((string) x.Id), checkUnpublished: true)))
+                        .Where(x => int.Parse((string)x.Id) > 0
+                            && ipFilterService.IsIpProtected(int.Parse((string)x.Id), checkUnpublished: true)))
                     {
                         node.CssClasses.Add("protected");
 
@@ -94,7 +94,7 @@ namespace Our.Umbraco.IpFilter
 
                     if (!req.PublishedContent.CanAccess(ipAddress, out errorPageNodeId))
                     {
-                        if (errorPageNodeId > 0) 
+                        if (errorPageNodeId > 0)
                         {
                             var node = UmbracoContext.Current.ContentCache.GetById(errorPageNodeId);
                             if (node != null && node.Id != req.PublishedContent.Id)

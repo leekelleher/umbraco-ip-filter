@@ -32,7 +32,7 @@ namespace Our.Umbraco.IpFilter.Models
             }
             set { __RawWhitelist = string.Join("\n", value.Select(x => x.Trim()).Where(x => !x.IsNullOrWhiteSpace())); }
         }
-            
+
         [JsonProperty("blacklist")]
         [Column("Blacklist")]
         [SpecialDbType(SpecialDbTypes.NTEXT)]

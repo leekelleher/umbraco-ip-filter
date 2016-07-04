@@ -1,46 +1,48 @@
-﻿<div ng-controller="Our.Umbraco.IpFilter.Controllers.IpFilterController" 
+﻿<div ng-controller="Our.Umbraco.IpFilter.Controllers.IpFilterController"
      class="umbracoDialog umb-dialog">
-    
+
     <div class="umb-dialog-body">
         <div class="umb-pane">
             <div class="control-group umb-control-group">
-                
+
                 <p class="umb-abstract">Enter one or more IP Address of machines you wish to whitelist/blacklist from accessing this page</p>
 
                 <div class="umb-el-wrap">
                     <label class="control-label">
                         Whitelist<br />
-                        <small> 
+                        <small>
                             If set, access to the current page will be blocked to everyone except for those who's IP address appears in the following list.
                             <br /><br />Enter each IP address on a new line.
                         </small>
-                    </label> 
+                    </label>
                     <div class="controls controls-row">
                         <textarea class="umb-textarea textstring" ng-model="entry.whitelist" style="width: 75%;height: 120px;"></textarea>
                     </div>
                 </div>
-                
+
                 <div class="umb-el-wrap">
                     <label class="control-label">
                         Blacklist<br />
-                        <small>If set, access to the current page will be granted to everyone except for those who's IP address appears in the following list.
-                        <br /><br />Enter each IP address on a new line.</small>
+                        <small>
+                            If set, access to the current page will be granted to everyone except for those who's IP address appears in the following list.
+                            <br /><br />Enter each IP address on a new line.
+                        </small>
                     </label>
                     <div class="controls controls-row">
                         <textarea class="umb-textarea textstring" ng-model="entry.blacklist" style="width: 75%;height: 120px;"></textarea>
                     </div>
                 </div>
-                
+
                 <div class="umb-el-wrap">
                     <label class="control-label">
                         Error page<br />
                         <small>Select the page to redirect to if the visitor is not permited to view the page.</small>
                     </label>
                     <div class="controls controls-row">
-                        <umb-content-picker ng-model="entry.errorPageNodeId"></umb-content-picker>  
+                        <umb-content-picker ng-model="entry.errorPageNodeId"></umb-content-picker>
                     </div>
                 </div>
-                 
+
                 <div class="umb-el-wrap">
                     <label class="control-label">
                         Enabled<br />

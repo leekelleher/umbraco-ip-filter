@@ -1,6 +1,4 @@
-﻿using System.Web.Http;
-using Our.Umbraco.IpFilter.Data.Repositories;
-using Our.Umbraco.IpFilter.Models;
+﻿using Our.Umbraco.IpFilter.Models;
 using Our.Umbraco.IpFilter.Services;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
