@@ -2,22 +2,23 @@
 <umbPackage>
 	<info>
 		<package>
-			<name>IpFilter</name>
+			<name></name>
 			<version>0.0.0</version>
-			<license url="http://www.opensource.org/licenses/MIT">MIT license</license>
-			<url>http://our.umbraco.org/projects/backoffice-extensions/ipfilter</url>
+			<license url=""></license>
+			<url></url>
 			<requirements>
-				<major>7</major>
-				<minor>1</minor>
-				<patch>4</patch>
+				<major>0</major>
+				<minor>0</minor>
+				<patch>0</patch>
 			</requirements>
 		</package>
 		<author>
-			<name>Lee Kelleher, Matt Brailsford</name>
-			<website>http://our.umbraco.org</website>
+			<name></name>
+			<website></website>
 		</author>
 		<readme><![CDATA[]]></readme>
 	</info>
+
 	<DocumentTypes />
 	<Templates />
 	<Stylesheets />
@@ -25,7 +26,11 @@
 	<DictionaryItems />
 	<Languages />
 	<DataTypes />
+
 	<Actions />
+
 	<control />
+
 	<files />
+
 </umbPackage>
