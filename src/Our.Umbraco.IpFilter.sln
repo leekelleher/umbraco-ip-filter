@@ -1,23 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F70B6E09-0450-4683-B5CD-88EDD89B0678}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5CF9324B-2A85-4FFE-A908-0F79E6021388}"
 	ProjectSection(SolutionItems) = preProject
-		Package.build.xml = Package.build.xml
-		Package.xml = Package.xml
-		README.md = README.md
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\LICENSE.md = ..\LICENSE.md
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.IpFilter", "Src\Our.Umbraco.IpFilter\Our.Umbraco.IpFilter.csproj", "{909AEE11-BEB5-467E-BE0F-44EAC82A7449}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Package", "Build Package", "{5CF9324B-2A85-4FFE-A908-0F79E6021388}"
+	ProjectSection(SolutionItems) = preProject
+		..\appveyor.yml = ..\appveyor.yml
+		..\build-appveyor.cmd = ..\build-appveyor.cmd
+		..\build.cmd = ..\build.cmd
+		..\build\package.nuspec = ..\build\package.nuspec
+		..\build\package.proj = ..\build\package.proj
+		..\build\package.xml = ..\build\package.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.IpFilter", "Our.Umbraco.IpFilter\Our.Umbraco.IpFilter.csproj", "{909AEE11-BEB5-467E-BE0F-44EAC82A7449}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{17A0BA93-8B93-4CAA-B526-5E6F1FC814CA}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Global
