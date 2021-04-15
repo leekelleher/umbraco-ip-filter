@@ -1,6 +1,6 @@
 # IP Filter for Umbraco
 
-[![Build status](https://img.shields.io/appveyor/ci/leekelleher/umbraco-ip-filter.svg)](https://ci.appveyor.com/project/leekelleher/umbraco-ip-filter)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 An IP address filter for Umbraco 7+
 
